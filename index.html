@@ -97,7 +97,8 @@
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     background: rgba(255,248,249,0.88);
     border-bottom: 2px solid var(--pink-light);
-    padding: 12px 20px;
+    padding: 12px 20px 12px 20px;
+    min-height: 100px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -795,6 +796,10 @@
     .city-time { font-size: 1.3rem; }
     .hero-title { font-size: 2rem; }
   }
+
+  #day1, #day2, #day3, #day4, #day5, #day6 {
+    scroll-margin-top: 115px;
+  }
 </style>
 </head>
 <body>
@@ -808,7 +813,14 @@
 <div class="petal" style="left:88%;animation-duration:8.5s;animation-delay:4s;">🌸</div>
 
 <!-- Floating Flag -->
-<div class="floating-flag">🇯🇵</div>
+<div style="position:fixed;top:12px;right:12px;z-index:1000;display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+  <a href="#day1" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D1</a>
+  <a href="#day2" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D2</a>
+  <a href="#day3" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D3</a>
+  <a href="#day4" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D4</a>
+  <a href="#day5" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D5</a>
+  <a href="#day6" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D6</a>
+</div>
 
 <!-- Sticky Header -->
 <div class="sticky-header">
@@ -896,6 +908,83 @@
     <div class="flight-date">📅 2026年4月24日（星期五）</div>
   </div>
 </div>
+
+<!-- ===== 行李準備清單 ===== -->
+<div class="flight-section" style="padding-top:10px;">
+  <div class="section-label">🧳 行李準備清單</div>
+  <div class="hotel-card" style="border-color:rgba(255,154,178,0.4);">
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:15px;font-weight:800;color:var(--pink-deep);font-family:'Nunito',sans-serif;">準備進度</div>
+        <div id="progress-text" style="font-size:15px;font-weight:800;color:var(--pink-deep);font-family:'Nunito',sans-serif;">0 / 0</div>
+      </div>
+      <div style="background:var(--pink-light);border-radius:10px;height:10px;overflow:hidden;">
+        <div id="progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#ff9ab2,#ffd166);border-radius:10px;transition:width 0.3s ease;"></div>
+      </div>
+    </div>
+    <div id="checklist-container" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">護照</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">日幣現金</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">信用卡</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">行動電源</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">暈車藥</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">充電器</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">網路E-SIM</span></div>
+      <div class="check-item" onclick="toggleItem(this)"><span class="check-box">⬜</span><span class="check-label">西瓜卡</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const checked = document.querySelectorAll('.check-item.checked').length;
+  const total = items.length;
+  document.getElementById('progress-text').textContent = checked + ' / ' + total;
+  document.getElementById('progress-bar').style.width = (total ? (checked / total * 100) : 0) + '%';
+}
+function toggleItem(el) {
+  el.classList.toggle('checked');
+  const label = el.querySelector('.check-label');
+  if (el.classList.contains('checked')) {
+    el.style.opacity = '0.45';
+    label.style.textDecoration = 'line-through';
+    el.querySelector('.check-box').textContent = '✅';
+  } else {
+    el.style.opacity = '1';
+    label.style.textDecoration = 'none';
+    el.querySelector('.check-box').textContent = '⬜';
+  }
+  updateProgress();
+}
+window.addEventListener('DOMContentLoaded', updateProgress);
+</script>
+
+<style>
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-bottom: 1px dashed var(--pink-light);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: opacity 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.check-item:active { background: rgba(255,154,178,0.08); }
+.check-box { font-size: 18px; flex-shrink: 0; }
+.check-label { font-size: 16px; font-weight: 600; color: var(--text); font-family: 'Nunito', sans-serif; flex: 1; }
+.check-category {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--pink-deep);
+  font-family: 'Nunito', sans-serif;
+  padding: 10px 4px 2px;
+  border-bottom: 2px solid var(--pink-light);
+  margin-bottom: 2px;
+}
+</style>
 
 <!-- ===== 高鐵資訊 ===== -->
 <div class="flight-section" style="padding-top:10px;">
@@ -991,6 +1080,7 @@
 
 <div class="section-divider"></div>
 
+<div id="day1"></div>
 <!-- ===== DAY 1 ===== -->
 <div class="day-section">
   <div class="day-label-wrap">
@@ -1079,6 +1169,39 @@
         </div>
         <div class="timeline-card-subtitle">Dai-ichi Inn Ikebukuro｜池袋東口</div>
         <div style="font-size:16px;color:var(--pink-deep);font-weight:800;margin-top:8px;">📌 行李搬不動可由 PROCO 搭電梯至1樓</div>
+        <div style="margin-top:10px;padding:10px;background:rgba(255,154,178,0.06);border-radius:10px;border:1.5px solid rgba(255,154,178,0.2);">
+          <div style="font-size:16px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;margin-bottom:4px;">🍽️ 附近餐廳</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">炭火燒鳥母家 <span style="font-size:13px;color:var(--text-muted);">（可預訂）</span></div>
+              <div class="tags-row" style="margin-top:4px;">
+                <span class="tag tag-food">🍢 串燒</span>
+                <span class="tag tag-culture">🕐 16:00–22:00</span>
+              </div>
+            </div>
+            <a href="https://maps.app.goo.gl/7u8yk6AxcVYxJi9T9" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">珈琲専門館伯爵</div>
+              <div class="tags-row" style="margin-top:4px;">
+                <span class="tag tag-food">🍞 吐司</span>
+                <span class="tag tag-culture">🕐 08:00–23:30</span>
+              </div>
+            </div>
+            <a href="https://maps.app.goo.gl/2tgQjzDXqJ4CYb5J7" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">とんかつ 大吉 <span style="font-size:13px;color:var(--text-muted);">（可預訂）</span></div>
+              <div class="tags-row" style="margin-top:4px;">
+                <span class="tag tag-food">🥩 炸豬排</span>
+                <span class="tag tag-culture">🕐 10:00–22:00</span>
+              </div>
+            </div>
+            <a href="https://maps.app.goo.gl/DefFr6uoR4SL8rAc9" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1087,6 +1210,7 @@
 
 <div class="section-divider"></div>
 
+<div id="day2"></div>
 <!-- ===== DAY 2 ===== -->
 <div class="day-section">
   <div class="day-label-wrap">
@@ -1213,6 +1337,72 @@
         </div>
         <a href="https://maps.app.goo.gl/SensojiTokyo" target="_blank" class="map-btn">📍 Google Map</a>
         <div style="font-size:16px;color:var(--text-muted);margin-top:8px;padding-top:8px;border-top:1.5px dashed var(--pink-light);">看門口人力車的帥哥 😍</div>
+        <div style="margin-top:10px;padding:10px;background:rgba(255,154,178,0.06);border-radius:10px;border:1.5px solid rgba(255,154,178,0.2);">
+          <div style="font-size:16px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;margin-bottom:4px;">🍽️ 附近餐廳</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">並木藪蕎麦</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍜 蕎麥麵</span><span class="tag tag-culture">🕐 11:00–19:30</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/tYaJScKVCPuzEsAp6" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">米久本店</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍲 壽喜燒</span><span class="tag tag-culture">🕐 12:00–21:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/yzHc3r4nXKxqGvVD8" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">大黒家天麩羅</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍤 天婦羅</span><span class="tag tag-culture">🕐 11:00–20:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/w6rowQ7mkaoL31Fo7" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">夏の家</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🥩 炸豬排</span><span class="tag tag-culture">🕐 09:00–19:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/xfu4SXmSfdYDmo4f8" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">おにぎり浅草宿六</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍙 飯糰</span><span class="tag tag-culture">🕐 11:30–20:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/c46dU1djHh2cJCCZA" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">淺草シルクプリン</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍮 布丁</span><span class="tag tag-culture">🕐 10:00–21:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/eYGoa5rd9xQrztR87" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">浅草メンチ</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍖 炸肉餅</span><span class="tag tag-culture">🕐 10:00–19:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/JdNrM3hAgphK9pSt8" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">龜十</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🥮 銅鑼燒</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/Sw15bKWy6j7E62Kh7" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">喜久屋</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍡 丸子</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/GjWD9KGjfSsg96Rk9" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1271,27 +1461,61 @@
           <span class="tag tag-fun">🎉 熱鬧</span>
         </div>
         <div style="font-size:16px;color:var(--text-muted);margin-top:8px;padding-top:8px;border-top:1.5px dashed var(--pink-light);">東京最熱鬧的露天市集，零食、服飾、生鮮通通有！</div>
-        <div style="margin-top:10px;padding-top:10px;border-top:1.5px dashed var(--pink-light);">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-            <div>
-              <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Nunito',sans-serif;">Yamashiroya</div>
+        <div style="margin-top:10px;padding:10px;background:rgba(192,132,252,0.06);border-radius:10px;border:1.5px solid rgba(192,132,252,0.2);">
+          <div style="font-size:16px;font-weight:900;color:#7c3aed;font-family:'Nunito',sans-serif;margin-bottom:4px;">🛍️ 購物</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">Yamashiroya</div>
               <div class="tags-row" style="margin-top:4px;"><span class="tag tag-fun">🧸 玩具</span></div>
             </div>
-            <a href="https://maps.app.goo.gl/bzbtUgPiy9vAjuws6" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Google Map</a>
+            <a href="https://maps.app.goo.gl/bzbtUgPiy9vAjuws6" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;">
-            <div>
-              <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Nunito',sans-serif;">二木の菓子</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">二木の菓子</div>
               <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍬 零食</span></div>
             </div>
-            <a href="https://maps.app.goo.gl/beqhQAvqAeDjb1Z27" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Google Map</a>
+            <a href="https://maps.app.goo.gl/beqhQAvqAeDjb1Z27" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;">
-            <div>
-              <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Nunito',sans-serif;">多慶屋</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">多慶屋</div>
               <div class="tags-row" style="margin-top:4px;"><span class="tag tag-shop">🛒 超市</span></div>
             </div>
-            <a href="https://maps.app.goo.gl/qcaQ8Lvj1U8T1yhA9" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Google Map</a>
+            <a href="https://maps.app.goo.gl/qcaQ8Lvj1U8T1yhA9" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">ザ・ガーデン自由が丘 上野店</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-shop">🛒 超市</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/T9PsCRs5qMRBc6Xn7" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+        </div>
+
+        <!-- 附近餐廳 -->
+        <div style="margin-top:10px;padding:10px;background:rgba(255,154,178,0.06);border-radius:10px;border:1.5px solid rgba(255,154,178,0.2);">
+          <div style="font-size:16px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;margin-bottom:4px;">🍽️ 附近餐廳</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">とんかつ山家 上野店</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🥩 豬排</span><span class="tag tag-culture">🕐 11:00–15:00 / 17:00–21:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/nA9zYt6AdTyjrC5E6" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">上野藪そば</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍜 蕎麥麵</span><span class="tag tag-culture">🕐 17:00–21:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/ZkAggnyPZkyTAbUU9" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">やきとり 上野文楽</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍢 串燒</span><span class="tag tag-culture">🕐 14:00–23:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/ebr8UjkijQxy7qCN7" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
           </div>
         </div>
       </div>
@@ -1340,6 +1564,7 @@
 
 <div class="section-divider"></div>
 
+<div id="day3"></div>
 <!-- ===== DAY 3 ===== -->
 <div class="day-section">
   <div class="day-label-wrap">
@@ -1423,7 +1648,7 @@
           </div>
         </div>
         <div class="timeline-card-subtitle">お台場海浜公園站到站即達</div>
-        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都港区台場1-6-1　🕐 11:00～20:00</div>
+        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都港区台場1-6-1🕐 11:00～20:00</div>
         <div style="display:flex;gap:8px;margin-top:6px;">
           <a href="https://www.odaiba-decks.com" target="_blank" class="map-btn">🌐 官網</a>
           <a href="https://maps.app.goo.gl/QVhGzPzHHTLqhapJA" target="_blank" class="map-btn">📍 Google Map</a>
@@ -1514,7 +1739,7 @@
           </div>
         </div>
         <div class="timeline-card-subtitle">集結娛樂、購物、美食等大型商業設施</div>
-        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都江東區青海1-1-10　🕐 11:00～20:00</div>
+        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都江東區青海1-1-10🕐 11:00～20:00</div>
         <div style="display:flex;gap:8px;margin-top:6px;">
           <a href="https://mitsui-shopping-park.com/tw/divercity-tokyo/" target="_blank" class="map-btn">🌐 官網</a>
           <a href="https://maps.app.goo.gl/yJSMAr1hk4iDh57H6" target="_blank" class="map-btn">📍 Google Map</a>
@@ -1631,7 +1856,7 @@
           </div>
         </div>
         <div class="timeline-card-subtitle">沉浸式數位藝術體驗</div>
-        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都江東区豊洲6-1-16　🕐 8:30 - 22:00</div>
+        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都江東区豊洲6-1-16🕐 8:30 - 22:00</div>
         <div style="display:flex;gap:8px;margin-top:6px;">
           <a href="https://www.teamlab.art/zh-hant/e/planets/#information" target="_blank" class="map-btn">🌐 官網</a>
           <a href="https://maps.app.goo.gl/kCuWxTMsyoKURKrW6" target="_blank" class="map-btn">📍 Google Map</a>
@@ -1695,6 +1920,7 @@
 
 <div class="section-divider"></div>
 
+<div id="day4"></div>
 <!-- ===== DAY 4 ===== -->
 <div class="day-section">
   <div class="day-label-wrap">
@@ -1704,7 +1930,7 @@
   </div>
 
   <div style="background:rgba(255,154,178,0.08);border:2px solid var(--sakura);border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:16px;font-weight:700;color:var(--text-muted);">
-    🗺️ 今日行程：<strong style="color:var(--text);">東京大神宮</strong> → <strong style="color:var(--text);">芝公園</strong> → <strong style="color:var(--text);">池袋</strong>
+    🗺️ 今日行程：<strong style="color:var(--text);">妙義神社</strong> → <strong style="color:var(--text);">東京大神宮</strong> → <strong style="color:var(--text);">東京鐵塔</strong> → <strong style="color:var(--text);">池袋</strong>
   </div>
 
   <div class="period-header">
@@ -1726,72 +1952,192 @@
       </div>
     </div>
 
-    <!-- 池袋 → 飯田橋 -->
+    <!-- 池袋→駒込 -->
     <div class="transit-connector transit-train">
       <div class="transit-icon-wrap">🚊</div>
       <div class="transit-body" style="flex-direction:column;align-items:stretch;gap:0;padding:10px 14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">池袋 → 飯田橋</div>
-          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">09:03 → 09:14　11分</div>
-          <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">178円</div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">池袋 → 駒込</div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">09:01 → 09:08　7分</div>
+          <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">199円</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">09:03</div>
-          <div style="width:12px;height:12px;border-radius:50%;background:#f9ca24;flex-shrink:0;"></div>
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">09:01</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#27ae60;flex-shrink:0;"></div>
           <div style="font-size:16px;font-weight:900;color:var(--text);">池袋 発</div>
         </div>
         <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
           <div style="min-width:44px;"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#f9ca24;"></div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#27ae60;"></div></div>
           <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
-            🚃 東京メトロ有楽町線　新木場行<br>
-            <span style="color:#2563eb;font-weight:800;">[発] 3番線</span>
+            🚃 JR山手線外回り　上野・東京方面<br>
+            <span style="color:#2563eb;font-weight:800;">[発] 7番線</span>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">09:14</div>
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">09:08</div>
           <div style="width:12px;height:12px;border-radius:50%;background:#27ae60;flex-shrink:0;"></div>
-          <div style="font-size:16px;font-weight:900;color:var(--text);">飯田橋 着　<span style="font-size:14px;font-weight:700;color:var(--text-muted);">出口：A4</span></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">駒込 着</div>
         </div>
       </div>
     </div>
 
-    <!-- 1. 東京大神宮 -->
+    <!-- 1. 妙義神社 -->
     <div class="timeline-item">
       <div class="timeline-dot morning"></div>
-      <div class="timeline-time"><span>09:00 抵達</span><span>⏱ 預計停留 1H</span></div>
+      <div class="timeline-time"><span>09:15 抵達</span><span>⏱ 預計停留 1H</span></div>
       <div class="timeline-card">
         <div class="timeline-card-header">
           <div>
             <span class="num-badge">1</span>
+            <span class="timeline-card-title">妙義神社 ⛩️</span>
+          </div>
+        </div>
+        <div class="timeline-card-subtitle">玻璃彩繪御守</div>
+        <div class="tags-row">
+          <span class="tag tag-culture">⛩️ 神社</span>
+          <span class="tag tag-fun">🎴 御守</span>
+          <span class="tag tag-culture">🕐 9:00–16:00</span>
+        </div>
+        <div style="font-size:16px;color:var(--text-muted);margin-top:8px;padding-top:8px;border-top:1.5px dashed var(--pink-light);">出口：北口 徒步 5 分鐘</div>
+      </div>
+    </div>
+
+    <!-- 駒込→神楽坂 -->
+    <div class="transit-connector transit-train">
+      <div class="transit-icon-wrap">🚊</div>
+      <div class="transit-body" style="flex-direction:column;align-items:stretch;gap:0;padding:10px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">駒込 → 神楽坂</div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">10:30 → 10:56　24分</div>
+          <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">209円</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">10:30</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#7c3aed;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">駒込 発</div>
+        </div>
+        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
+          <div style="min-width:44px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#7c3aed;"></div></div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
+            🚃 東京メトロ南北線　白金高輪行<br>
+            <span style="color:#2563eb;font-weight:800;">[発] 2番線</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:14px;font-weight:700;color:var(--text-muted);font-family:'Nunito',sans-serif;min-width:44px;line-height:1.3;">10:41着<br>10:54発</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:white;border:2px solid #74b9ff;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">飯田橋 乗換</div>
+        </div>
+        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
+          <div style="min-width:44px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#74b9ff;"></div></div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
+            🚃 東京メトロ東西線快速　中野行<br>
+            <span style="color:#2563eb;font-weight:800;">[発] 2番線</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">10:56</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#74b9ff;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">神楽坂 着</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. AKOMEYA -->
+    <div class="timeline-item">
+      <div class="timeline-dot morning"></div>
+      <div class="timeline-time"><span>11:00 抵達</span><span>⏱ 預計停留 1H</span></div>
+      <div class="timeline-card">
+        <div class="timeline-card-header">
+          <div>
+            <span class="num-badge">2</span>
+            <span class="timeline-card-title">AKOMEYA食堂 神楽坂 🍱</span>
+          </div>
+        </div>
+        <div class="timeline-card-subtitle">午餐</div>
+        <div class="tags-row">
+          <span class="tag tag-food">🍱 午餐</span>
+          <span class="tag tag-culture">🕐 11:00–20:00</span>
+        </div>
+        <div style="font-size:16px;color:var(--text-muted);margin-top:6px;font-weight:600;">出口 2 號</div>
+        <a href="https://maps.app.goo.gl/BHVz4cBhiPfEe7wA6" target="_blank" class="map-btn">📍 Google Map</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="period-header" style="padding-top:4px;">
+    <span class="period-icon">⛩️</span>
+    <span class="period-title afternoon">Afternoon · 下午</span>
+  </div>
+
+  <div class="timeline">
+
+    <!-- 神楽坂→飯田橋 -->
+    <div class="transit-connector transit-train">
+      <div class="transit-icon-wrap">🚊</div>
+      <div class="transit-body" style="flex-direction:column;align-items:stretch;gap:0;padding:10px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">神楽坂 → 飯田橋</div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">12:30 → 12:32　2分</div>
+          <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">178円</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">12:30</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#74b9ff;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">神楽坂 発</div>
+        </div>
+        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
+          <div style="min-width:44px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#74b9ff;"></div></div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
+            🚃 東京メトロ東西線　西船橋行<br>
+            <span style="color:#2563eb;font-weight:800;">[発] 1番線</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">12:32</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#74b9ff;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">飯田橋 着</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 東京大神宮 -->
+    <div class="timeline-item">
+      <div class="timeline-dot afternoon"></div>
+      <div class="timeline-time"><span>12:40 抵達</span><span>⏱ 預計停留 1H30M</span></div>
+      <div class="timeline-card">
+        <div class="timeline-card-header">
+          <div>
+            <span class="num-badge">3</span>
             <span class="timeline-card-title">東京大神宮 ⛩️</span>
           </div>
         </div>
-        <div class="timeline-card-subtitle">飯田橋站徒步約 5 分鐘</div>
-        <div style="font-size:15px;color:var(--text-muted);margin-top:2px;font-weight:600;">📍 東京都千代田区富士見2-4-1</div>
+        <div class="timeline-card-subtitle">東京五大神社之一，求緣結御守超有名</div>
         <div class="tags-row">
           <span class="tag tag-culture">⛩️ 神社</span>
           <span class="tag tag-fun">🎴 御守</span>
         </div>
-        <div style="display:flex;gap:8px;margin-top:6px;">
-          <a href="https://www.tokyodaijingu.or.jp/" target="_blank" class="map-btn">🌐 官網</a>
-          <a href="https://maps.app.goo.gl/azmAe42uPLGh853v6" target="_blank" class="map-btn">📍 Google Map</a>
-        </div>
-        <div style="font-size:16px;color:var(--text-muted);margin-top:8px;padding-top:8px;border-top:1.5px dashed var(--pink-light);">東京五大神社之一，求緣結御守超有名</div>
+        <div style="font-size:16px;color:var(--text-muted);margin-top:6px;font-weight:600;">出口：A5 徒步 4 分鐘</div>
+        <a href="https://maps.app.goo.gl/uM1tHx22CM5NgDm67" target="_blank" class="map-btn">📍 Google Map</a>
       </div>
     </div>
 
-    <!-- 飯田橋 → 芝公園 -->
+    <!-- 飯田橋→芝公園 -->
     <div class="transit-connector transit-train">
       <div class="transit-icon-wrap">🚊</div>
       <div class="transit-body" style="flex-direction:column;align-items:stretch;gap:0;padding:10px 14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
           <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">飯田橋 → 芝公園</div>
-          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">10:26 → 10:47　21分</div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">14:23 → 14:48　25分</div>
           <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">286円</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">10:26</div>
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">14:23</div>
           <div style="width:12px;height:12px;border-radius:50%;background:#74b9ff;flex-shrink:0;"></div>
           <div style="font-size:16px;font-weight:900;color:var(--text);">飯田橋 発</div>
         </div>
@@ -1804,7 +2150,7 @@
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:14px;font-weight:700;color:var(--text-muted);font-family:'Nunito',sans-serif;min-width:44px;line-height:1.3;">10:32着<br>10:40発</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text-muted);font-family:'Nunito',sans-serif;min-width:44px;line-height:1.3;">14:29着<br>14:41発</div>
           <div style="width:12px;height:12px;border-radius:50%;background:white;border:2px solid #e8557a;flex-shrink:0;"></div>
           <div style="font-size:16px;font-weight:900;color:var(--text);">大手町 乗換</div>
         </div>
@@ -1817,102 +2163,170 @@
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">10:47</div>
-          <div style="width:12px;height:12px;border-radius:50%;background:#27ae60;flex-shrink:0;"></div>
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">14:48</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#e8557a;flex-shrink:0;"></div>
           <div style="font-size:16px;font-weight:900;color:var(--text);">芝公園 着</div>
         </div>
       </div>
     </div>
 
-    <!-- 2. 芝公園 -->
+    <!-- 4. 東京鐵塔 -->
     <div class="timeline-item">
       <div class="timeline-dot afternoon"></div>
-      <div class="timeline-time"><span>11:00 抵達</span><span>⏱ 預計停留 1H30M</span></div>
-      <div class="timeline-card" style="border-color:rgba(123,198,126,0.3);">
+      <div class="timeline-time"><span>15:00 抵達</span><span>⏱ 預計停留 2H30M</span></div>
+      <div class="timeline-card" style="border-color:rgba(232,85,122,0.3);">
         <div class="timeline-card-header">
           <div>
-            <span class="num-badge" style="background:linear-gradient(135deg,#7bc67e,#27ae60);">2</span>
-            <span class="timeline-card-title">芝公園 🗼</span>
+            <span class="num-badge" style="background:linear-gradient(135deg,#e8557a,#ff8c42);">4</span>
+            <span class="timeline-card-title">東京鐵塔 🗼</span>
           </div>
         </div>
-        <div class="timeline-card-subtitle">櫻花・鐵塔・增上寺</div>
+        <div class="timeline-card-subtitle"></div>
         <div class="tags-row">
+          <span class="tag tag-culture">🗼 鐵塔</span>
+          <span class="tag tag-culture">📸 美景</span>
           <span class="tag tag-nature">🌸 賞花</span>
-          <span class="tag tag-culture">🗼 東京鐵塔</span>
-          <span class="tag tag-culture">⛩️ 增上寺</span>
-        </div>
-        <div style="font-size:16px;color:var(--text-muted);margin-top:8px;padding-top:8px;border-top:1.5px dashed var(--pink-light);">櫻花銀杏美景與地下樓梯 IG 打卡點</div>
-      </div>
-    </div>
-
-    <!-- 芝公園 → 池袋 -->
-    <div class="transit-connector transit-train">
-      <div class="transit-icon-wrap">🚊</div>
-      <div class="transit-body" style="flex-direction:column;align-items:stretch;gap:0;padding:10px 14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">芝公園 → 池袋</div>
-          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">12:34 → 13:08　34分</div>
-          <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">427円</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">12:34</div>
-          <div style="width:12px;height:12px;border-radius:50%;background:#e8557a;flex-shrink:0;"></div>
-          <div style="font-size:16px;font-weight:900;color:var(--text);">芝公園 発</div>
-        </div>
-        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
-          <div style="min-width:44px;"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#e8557a;"></div></div>
-          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">都営三田線</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:14px;font-weight:700;color:var(--text-muted);font-family:'Nunito',sans-serif;min-width:44px;line-height:1.3;">12:54着<br>13:03発</div>
-          <div style="width:12px;height:12px;border-radius:50%;background:white;border:2px solid #27ae60;flex-shrink:0;"></div>
-          <div style="font-size:16px;font-weight:900;color:var(--text);">巣鴨 乗換</div>
-        </div>
-        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
-          <div style="min-width:44px;"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#27ae60;"></div></div>
-          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
-            🚃 JR山手線内回り　池袋・新宿方面<br>
-            <span style="color:#2563eb;font-weight:800;">[発] 2番線</span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">13:08</div>
-          <div style="width:12px;height:12px;border-radius:50%;background:#27ae60;flex-shrink:0;"></div>
-          <div style="font-size:16px;font-weight:900;color:var(--text);">池袋 着</div>
         </div>
       </div>
     </div>
 
-    <!-- 3. 池袋 -->
-    <div class="timeline-item">
-      <div class="timeline-dot afternoon"></div>
-      <div class="timeline-time"><span>13:00 抵達</span></div>
-      <div class="timeline-card">
-        <div class="timeline-card-header">
-          <div>
-            <span class="num-badge">3</span>
-            <span class="timeline-card-title">池袋 🛍️</span>
-          </div>
-        </div>
-        <div class="timeline-card-subtitle">池袋周邊自由逛</div>
-        <div class="tags-row">
-          <span class="tag tag-shop">🛍️ 購物</span>
-          <span class="tag tag-food">🍽️ 美食</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 飯店 -->
+    <!-- 徒步 -->
     <div class="transit-connector transit-walk">
       <div class="transit-icon-wrap">🚶</div>
       <div class="transit-body">
-        <div class="transit-label"><strong>徒步</strong>　池袋 → 池袋第一旅館</div>
+        <div class="transit-label"><strong>徒步</strong>　東京鐵塔 → Le Pain Quotidien</div>
         <div class="transit-duration">約 5 分鐘</div>
       </div>
     </div>
 
+    <!-- 5. Le Pain Quotidien -->
+    <div class="timeline-item">
+      <div class="timeline-dot afternoon"></div>
+      <div class="timeline-card">
+        <div class="timeline-card-header">
+          <div>
+            <span class="num-badge">5</span>
+            <span class="timeline-card-title">Le Pain Quotidien 芝公園店 ☕</span>
+          </div>
+        </div>
+        <div class="timeline-card-subtitle"></div>
+        <div class="tags-row">
+          <span class="tag tag-food">☕ 下午茶</span>
+          <span class="tag tag-culture">🕐 07:30–21:00</span>
+        </div>
+        <a href="https://maps.app.goo.gl/7ejwt5iQAg2kuKg68" target="_blank" class="map-btn">📍 Google Map</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="period-header" style="padding-top:4px;">
+    <span class="period-icon">🌉</span>
+    <span class="period-title evening">Evening · 晚上</span>
+  </div>
+
+  <div class="timeline">
+
+    <!-- 赤羽橋→東池袋 -->
+    <div class="transit-connector transit-train">
+      <div class="transit-icon-wrap">🚊</div>
+      <div class="transit-body" style="flex-direction:column;align-items:stretch;gap:0;padding:10px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:16px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;">赤羽橋 → 東池袋</div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:700;">17:33 → 18:19　53分</div>
+          <div style="font-size:15px;font-weight:900;color:#2563eb;background:rgba(116,185,255,0.15);border-radius:8px;padding:2px 10px;font-family:'Nunito',sans-serif;">317円</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">17:33</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#e8557a;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">赤羽橋 発</div>
+        </div>
+        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
+          <div style="min-width:44px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#e8557a;"></div></div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
+            🚃 都営大江戸線　大門・両国方面<br>
+            <span style="color:#2563eb;font-weight:800;">[発] 1番線</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:14px;font-weight:700;color:var(--text-muted);font-family:'Nunito',sans-serif;min-width:44px;line-height:1.3;">17:45着<br>17:55発</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:white;border:2px solid #f9ca24;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">月島 乗換</div>
+        </div>
+        <div style="display:flex;align-items:stretch;gap:10px;padding:4px 0;">
+          <div style="min-width:44px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;flex:1;background:#f9ca24;"></div></div>
+          <div style="font-size:14px;color:var(--text-muted);font-weight:600;padding:2px 0;">
+            🚃 東京メトロ有楽町線　和光市行<br>
+            <span style="color:#2563eb;font-weight:800;">[発] 2番線</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:15px;font-weight:900;color:var(--text);font-family:'Nunito',sans-serif;min-width:44px;">18:19</div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#f9ca24;flex-shrink:0;"></div>
+          <div style="font-size:16px;font-weight:900;color:var(--text);">東池袋 着</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 太陽城 -->
+    <div class="timeline-item">
+      <div class="timeline-dot evening"></div>
+      <div class="timeline-card" style="border-color:rgba(255,154,178,0.35);">
+        <div class="timeline-card-header">
+          <div>
+            <span class="num-badge">6</span>
+            <span class="timeline-card-title">太陽城 Sunshine City 🎡</span>
+          </div>
+        </div>
+        <div class="timeline-card-subtitle">池袋東口，步行約 10 分鐘</div>
+        <div class="tags-row">
+          <span class="tag tag-fun">🎰 扭蛋</span>
+          <span class="tag tag-fun">🔴 寶可夢</span>
+          <span class="tag tag-fun">📵 沒收訊</span>
+          <span class="tag tag-fun">🐠 水族館</span>
+          <span class="tag tag-fun">🎢 展望台</span>
+          <span class="tag tag-culture">🕐 10:00–20:00</span>
+        </div>
+        <a href="https://maps.app.goo.gl/6dnSZA3sKaatTcoE9" target="_blank" class="map-btn">📍 Google Map</a>
+        <div style="margin-top:10px;padding:10px;background:rgba(255,154,178,0.06);border-radius:10px;border:1.5px solid rgba(255,154,178,0.2);">
+          <div style="font-size:16px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;margin-bottom:4px;">🍽️ 附近餐廳</div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">しゃぶしゃぶ 将泰庵</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🍲 火鍋</span><span class="tag tag-culture">🕐 17:00–22:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/8Y7uke2FKnf8t1Pv7" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">焼肉ホルモン ボンズ 池袋本館</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🥩 燒肉</span><span class="tag tag-culture">🕐 16:00–03:00</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/fMaMHsZ2cDScM48N8" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+          <div class="sub-item">
+            <div class="sub-item-info">
+              <div class="sub-item-name">焼肉うしごろ 池袋店</div>
+              <div class="tags-row" style="margin-top:4px;"><span class="tag tag-food">🥩 燒肉</span><span class="tag tag-culture">🕐 17:00–23:30</span></div>
+            </div>
+            <a href="https://maps.app.goo.gl/Tc3xxYp9vBAncck36" target="_blank" class="map-btn" style="flex-shrink:0;">📍 Map</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 徒步回飯店 -->
+    <div class="transit-connector transit-walk">
+      <div class="transit-icon-wrap">🚶</div>
+      <div class="transit-body">
+        <div class="transit-label"><strong>徒步</strong>　太陽城 → 池袋第一旅館</div>
+        <div class="transit-duration">約 11 分鐘</div>
+      </div>
+    </div>
+
+    <!-- 飯店 -->
     <div class="timeline-item">
       <div class="timeline-dot" style="background:linear-gradient(135deg,#ffd166,#ff8c42);box-shadow:0 0 0 3px white,0 0 10px rgba(255,209,102,0.4);"></div>
       <div class="timeline-card" style="border-color:rgba(255,209,102,0.35);">
@@ -1925,8 +2339,7 @@
   </div>
 </div>
 
-<div class="section-divider"></div>
-
+<div id="day5"></div>
 <div class="day-section">
   <div class="day-label-wrap">
     <div class="day-label-box">DAY 5</div>
@@ -2062,6 +2475,7 @@
 
 <div class="section-divider"></div>
 
+<div id="day6"></div>
 <!-- ===== DAY 6 ===== -->
 <div class="day-section" style="padding-bottom:24px;">
   <div class="day-label-wrap">
@@ -2073,6 +2487,7 @@
   <div class="notice-card">
     <div class="notice-title">⏰ 注意！當天注意事項</div>
     <div>🏨 退房時間 <strong>11:00</strong> 前 — 請提早整理行李！</div>
+    <div style="margin-top:4px;">🧳 退房後可將行李寄放在大廳櫃台</div>
     <div style="margin-top:4px;">🚌 池袋西口 7 號站巴士：08:15 或 09:15 → 成田機場約 10:00 / 11:00 抵達</div>
     <div style="margin-top:4px;">✈️ CX451 <strong>15:45 起飛</strong>，請至少 13:30 前抵達機場辦理登機</div>
   </div>
