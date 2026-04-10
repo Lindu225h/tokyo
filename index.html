@@ -89,9 +89,33 @@
   }
 
   /* Sticky Header */
-  .sticky-header {
+  .marquee-wrap {
     position: sticky;
     top: 0;
+    z-index: 101;
+    background: #fff0f0;
+    border-bottom: 2px solid #ff4444;
+    padding: 7px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-text {
+    display: inline-block;
+    animation: marquee 18s linear infinite;
+    font-size: 18px;
+    font-weight: 900;
+    color: #e00;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+  }
+
+  .sticky-header {
+    position: sticky;
+    top: 34px;
     z-index: 100;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -813,7 +837,7 @@
 <div class="petal" style="left:88%;animation-duration:8.5s;animation-delay:4s;">🌸</div>
 
 <!-- Floating Flag -->
-<div style="position:fixed;top:12px;right:12px;z-index:1000;display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+<div style="position:fixed;top:46px;right:12px;z-index:1000;display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
   <a href="#day1" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D1</a>
   <a href="#day2" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D2</a>
   <a href="#day3" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:white;border:2px solid var(--pink-light);border-radius:10px;font-size:13px;font-weight:900;color:var(--pink-deep);font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(255,154,178,0.25);">D3</a>
@@ -823,6 +847,9 @@
 </div>
 
 <!-- Sticky Header -->
+<div class="marquee-wrap">
+  <span class="marquee-text">請詳閱此行程表，看完再說話，若不閱讀，到現場請勿那個 🙏　　　　　　　　　　請詳閱此行程表，看完再說話，若不閱讀，到現場請勿那個 🙏　　　　　　　　　　</span>
+</div>
 <div class="sticky-header">
   <div>
     <div class="header-title">🌸 2026東京家族旅遊</div>
